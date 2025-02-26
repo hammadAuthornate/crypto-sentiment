@@ -3,6 +3,8 @@ import { TokenInfo } from "@/components/token-info";
 import { getTokenData } from "@/lib/token-service";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import { CoinGecko } from "@/lib/CoinGecko";
+import { CoinInfo } from "@/components/coin-info";
 
 interface TokenPageProps {
   params: {
@@ -14,11 +16,14 @@ export default async function TokenPage({ params }: TokenPageProps) {
   const { address } = await params;
 
   try {
-    const tokenData = await getTokenData(address);
+    // const tokenData = await getTokenData(address);
+    const tokenData = await CoinGecko.searchToken(address);
 
-    if (!tokenData) {
+    if (tokenData?.coins?.length === 0) {
       notFound();
     }
+
+    const coinDetails = await CoinGecko.getTokenDataByCoinId(tokenData?.coins?.at(0)?.id!);
 
     return (
       <div className="container mx-auto py-8 px-4">
@@ -26,7 +31,10 @@ export default async function TokenPage({ params }: TokenPageProps) {
           <Home />
         </Link>
         <h1 className="text-3xl font-bold mb-8">Token Information</h1>
-        <TokenInfo token={tokenData} />
+        {tokenData?.coins?.map((token, key) => (
+          <TokenInfo key={key} token={token} />
+        ))}
+        {coinDetails && <CoinInfo token={coinDetails} />}
       </div>
     );
   } catch (error) {
