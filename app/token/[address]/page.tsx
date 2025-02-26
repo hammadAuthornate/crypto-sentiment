@@ -3,10 +3,10 @@ import { TokenInfo } from "@/components/token-info";
 import { getTokenData } from "@/lib/token-service";
 import { Home } from "lucide-react";
 import Link from "next/link";
-import { CoinGecko } from "@/lib/CoinGecko";
+import { CoinGecko } from "@/lib/coin-gecko";
 import { CoinInfo } from "@/components/coin-info";
 import { COIN_DATA } from "@/const/coin-data";
-import { CoinGeckoCoinData } from "@/types/CoinGecko";
+import { CoinGeckoCoinData } from "@/types/coin-gecko";
 import { TOKEN_SEARCH } from "@/const/token-search";
 
 interface TokenPageProps {
@@ -20,25 +20,27 @@ export default async function TokenPage({ params }: TokenPageProps) {
 
   try {
     // const tokenData = await getTokenData(address);
-    // const tokenData = await CoinGecko.searchToken(address);
-    const tokenData = TOKEN_SEARCH;
+    const tokenData = await CoinGecko.searchToken(address);
+    // const tokenData = TOKEN_SEARCH;
 
     if (tokenData?.coins?.length === 0) {
       notFound();
     }
 
-    // const coinDetails = await CoinGecko.getTokenDataByCoinId(tokenData?.coins?.at(0)?.id!);
-    const coinDetails = COIN_DATA as unknown as CoinGeckoCoinData;
+    const coinDetails = await CoinGecko.getTokenDataByCoinId(
+      tokenData?.coins?.at(0)?.id!
+    );
+    // const coinDetails = COIN_DATA as unknown as CoinGeckoCoinData;
 
     return (
       <div className="container mx-auto py-8 px-4">
         <Link href="/">
-          <Home />
+          <Home className="mb-4" />
         </Link>
         <h1 className="text-3xl font-bold mb-8">Token Information</h1>
-        {tokenData?.coins?.map((token, key) => (
+        {/* {tokenData?.coins?.map((token, key) => (
           <TokenInfo key={key} token={token} />
-        ))}
+        ))} */}
         {coinDetails && <CoinInfo token={coinDetails} />}
       </div>
     );

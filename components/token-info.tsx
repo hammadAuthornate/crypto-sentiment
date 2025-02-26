@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { CoinGeckoCoinResponse } from "@/types/CoinGecko";
+import type { CoinGeckoCoinResponse } from "@/types/coin-gecko";
 import Image from "next/image";
 import {
   LineChart,

@@ -1,4 +1,4 @@
-import { CoinGeckoResponse, CoinGeckoCoinData } from "@/types/CoinGecko";
+import { CoinGeckoResponse, CoinGeckoCoinData } from "@/types/coin-gecko";
 
 export class CoinGecko {
   static async searchToken(address: string) {
