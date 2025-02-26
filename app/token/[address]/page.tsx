@@ -5,6 +5,9 @@ import { Home } from "lucide-react";
 import Link from "next/link";
 import { CoinGecko } from "@/lib/CoinGecko";
 import { CoinInfo } from "@/components/coin-info";
+import { COIN_DATA } from "@/const/coin-data";
+import { CoinGeckoCoinData } from "@/types/CoinGecko";
+import { TOKEN_SEARCH } from "@/const/token-search";
 
 interface TokenPageProps {
   params: {
@@ -17,13 +20,15 @@ export default async function TokenPage({ params }: TokenPageProps) {
 
   try {
     // const tokenData = await getTokenData(address);
-    const tokenData = await CoinGecko.searchToken(address);
+    // const tokenData = await CoinGecko.searchToken(address);
+    const tokenData = TOKEN_SEARCH;
 
     if (tokenData?.coins?.length === 0) {
       notFound();
     }
 
-    const coinDetails = await CoinGecko.getTokenDataByCoinId(tokenData?.coins?.at(0)?.id!);
+    // const coinDetails = await CoinGecko.getTokenDataByCoinId(tokenData?.coins?.at(0)?.id!);
+    const coinDetails = COIN_DATA as unknown as CoinGeckoCoinData;
 
     return (
       <div className="container mx-auto py-8 px-4">
