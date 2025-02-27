@@ -32,20 +32,24 @@ export function CoinInfo({ token }: TokenInfoProps) {
   const priceChangeData = [
     {
       period: "1h",
-      value: token.market_data.price_change_percentage_1h_in_currency?.usd || 0,
+      value:
+        token?.market_data?.price_change_percentage_1h_in_currency?.usd || 0,
     },
     {
       period: "24h",
-      value: token.market_data.price_change_percentage_24h || 0,
+      value: token?.market_data?.price_change_percentage_24h || 0,
     },
-    { period: "7d", value: token.market_data.price_change_percentage_7d || 0 },
+    {
+      period: "7d",
+      value: token?.market_data?.price_change_percentage_7d || 0,
+    },
     {
       period: "14d",
-      value: token.market_data.price_change_percentage_14d || 0,
+      value: token?.market_data?.price_change_percentage_14d || 0,
     },
     {
       period: "30d",
-      value: token.market_data.price_change_percentage_30d || 0,
+      value: token?.market_data?.price_change_percentage_30d || 0,
     },
   ].filter((item) => item.value !== 0);
 
@@ -56,27 +60,29 @@ export function CoinInfo({ token }: TokenInfoProps) {
         <CardHeader className="flex flex-col items-start justify-between">
           <div className="flex flex-row items-center w-full justify-between">
             <div className="flex items-center gap-4">
-              <img
-                src={token.image.small || "/placeholder.svg"}
-                alt={token.name}
-                width={48}
-                height={48}
-                className="rounded-full"
-              />
+              {token?.image?.small && (
+                <img
+                  src={token?.image?.small}
+                  alt={token?.name}
+                  width={48}
+                  height={48}
+                  className="rounded-full"
+                />
+              )}
               <div>
                 <div className="flex items-center gap-2">
-                  <CardTitle>{token.name}</CardTitle>
-                  <Badge variant="outline">{token.symbol.toUpperCase()}</Badge>
-                  {token.market_data.market_cap_rank && (
+                  <CardTitle>{token?.name}</CardTitle>
+                  <Badge variant="outline">{token?.symbol?.toUpperCase()}</Badge>
+                  {token?.market_data?.market_cap_rank && (
                     <Badge variant="secondary">
-                      Rank #{token.market_data.market_cap_rank}
+                      Rank #{token?.market_data?.market_cap_rank}
                     </Badge>
                   )}
                 </div>
                 <div className="flex items-center gap-4 mt-2">
-                  {token.links.homepage[0] && (
+                  {token?.links?.homepage?.at(0) && (
                     <Link
-                      href={token.links.homepage[0]}
+                      href={token?.links?.homepage?.at(0)?.toString() || ''}
                       target="_blank"
                       className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
                     >
@@ -84,9 +90,9 @@ export function CoinInfo({ token }: TokenInfoProps) {
                       Website
                     </Link>
                   )}
-                  {token.links.twitter_screen_name && (
+                  {token?.links?.twitter_screen_name && (
                     <Link
-                      href={`https://twitter.com/${token.links.twitter_screen_name}`}
+                      href={`https://twitter.com/${token?.links?.twitter_screen_name}`}
                       target="_blank"
                       className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
                     >
@@ -94,9 +100,9 @@ export function CoinInfo({ token }: TokenInfoProps) {
                       Twitter
                     </Link>
                   )}
-                  {token.links.telegram_channel_identifier && (
+                  {token?.links?.telegram_channel_identifier && (
                     <Link
-                      href={`https://t.me/${token.links.telegram_channel_identifier}`}
+                      href={`https://t.me/${token?.links?.telegram_channel_identifier}`}
                       target="_blank"
                       className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
                     >
@@ -109,23 +115,22 @@ export function CoinInfo({ token }: TokenInfoProps) {
             </div>
             <div className="text-right">
               <div className="text-2xl font-bold">
-                $
-                {token.market_data.current_price.usd.toString()}
+                ${token?.market_data?.current_price?.usd?.toString()}
               </div>
               <div
                 className={`text-sm font-medium ${
-                  token.market_data.price_change_percentage_24h >= 0
+                  token?.market_data?.price_change_percentage_24h >= 0
                     ? "text-green-600"
                     : "text-red-600"
                 }`}
               >
-                {token.market_data.price_change_percentage_24h >= 0 ? "+" : ""}
-                {token.market_data.price_change_percentage_24h.toFixed(2)}%
+                {token?.market_data?.price_change_percentage_24h >= 0 ? "+" : ""}
+                {token?.market_data?.price_change_percentage_24h?.toFixed(2)}%
               </div>
             </div>
           </div>
           <div>
-            <span className="font-light">Address</span> {token.contract_address}
+            <span className="font-light">Address</span> {token?.contract_address}
           </div>
         </CardHeader>
       </Card>
@@ -144,7 +149,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   Market Cap
                 </span>
                 <span className="font-medium">
-                  ${token.market_data.market_cap.usd.toLocaleString()}
+                  ${token?.market_data?.market_cap?.usd?.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -152,7 +157,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   24h Volume
                 </span>
                 <span className="font-medium">
-                  ${token.market_data.total_volume.usd.toLocaleString()}
+                  ${token?.market_data?.total_volume?.usd?.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -160,18 +165,18 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   Circulating Supply
                 </span>
                 <span className="font-medium">
-                  {token.market_data.circulating_supply.toLocaleString()}{" "}
-                  {token.symbol.toUpperCase()}
+                  {token?.market_data?.circulating_supply?.toLocaleString()}{" "}
+                  {token?.symbol?.toUpperCase()}
                 </span>
               </div>
-              {token.market_data.max_supply && (
+              {token?.market_data?.max_supply && (
                 <div className="flex justify-between">
                   <span className="text-sm text-muted-foreground">
                     Max Supply
                   </span>
                   <span className="font-medium">
-                    {token.market_data.max_supply.toLocaleString()}{" "}
-                    {token.symbol.toUpperCase()}
+                    {token?.market_data?.max_supply?.toLocaleString()}{" "}
+                    {token?.symbol?.toUpperCase()}
                   </span>
                 </div>
               )}
@@ -192,16 +197,16 @@ export function CoinInfo({ token }: TokenInfoProps) {
                 </span>
                 <div className="text-right">
                   <div className="font-medium">
-                    ${token.market_data.ath.usd.toLocaleString()}
+                    ${token?.market_data?.ath?.usd?.toLocaleString()}
                   </div>
                   <div
                     className={`text-xs ${
-                      token.market_data.ath_change_percentage.usd >= 0
+                      token?.market_data?.ath_change_percentage?.usd >= 0
                         ? "text-green-600"
                         : "text-red-600"
                     }`}
                   >
-                    {token.market_data.ath_change_percentage.usd.toFixed(1)}%
+                    {token?.market_data?.ath_change_percentage?.usd?.toFixed(1)}%
                   </div>
                 </div>
               </div>
@@ -211,16 +216,16 @@ export function CoinInfo({ token }: TokenInfoProps) {
                 </span>
                 <div className="text-right">
                   <div className="font-medium">
-                    ${token.market_data.atl.usd.toLocaleString()}
+                    ${token?.market_data?.atl?.usd?.toLocaleString()}
                   </div>
                   <div
                     className={`text-xs ${
-                      token.market_data.atl_change_percentage.usd >= 0
+                      token?.market_data?.atl_change_percentage?.usd >= 0
                         ? "text-green-600"
                         : "text-red-600"
                     }`}
                   >
-                    {token.market_data.atl_change_percentage.usd.toFixed(1)}%
+                    {token?.market_data?.atl_change_percentage?.usd?.toFixed(1)}%
                   </div>
                 </div>
               </div>
@@ -230,13 +235,13 @@ export function CoinInfo({ token }: TokenInfoProps) {
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">24h High</span>
                 <span className="font-medium">
-                  ${token.market_data.high_24h.usd.toLocaleString()}
+                  ${token?.market_data?.high_24h?.usd?.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">24h Low</span>
                 <span className="font-medium">
-                  ${token.market_data.low_24h.usd.toLocaleString()}
+                  ${token?.market_data?.low_24h?.usd?.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -254,7 +259,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
                 <span className="text-sm text-muted-foreground">Votes Up</span>
                 <div className="text-right">
                   <div className="font-medium text-green-600">
-                    {token.sentiment_votes_up_percentage.toLocaleString()}%
+                    {token?.sentiment_votes_up_percentage?.toLocaleString()}%
                   </div>
                 </div>
               </div>
@@ -264,7 +269,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
                 </span>
                 <div className="text-right">
                   <div className="font-medium text-red-600">
-                    {token.sentiment_votes_down_percentage.toLocaleString()}%
+                    {token?.sentiment_votes_down_percentage?.toLocaleString()}%
                   </div>
                 </div>
               </div>
@@ -276,7 +281,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   Watch-List Users
                 </span>
                 <span className="font-medium">
-                  {token.watchlist_portfolio_users.toLocaleString()}
+                  {token?.watchlist_portfolio_users?.toLocaleString()}
                 </span>
               </div>
               {/* <div className="flex justify-between">
@@ -299,7 +304,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
               <div className="flex justify-between">
                 <span className="text-sm text-muted-foreground">
                   <Link
-                    href={token.links.whitepaper}
+                    href={token?.links?.whitepaper}
                     target="_blank"
                     className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
                   >
@@ -308,12 +313,13 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   </Link>
                 </span>
               </div>
+              <Separator />
               <div className="flex flex-col gap-4 justify-start">
                 <span className="text-sm text-muted-foreground">
                   Blockchain Explorer
                 </span>
                 <div className="flex flex-row gap-4">
-                  {token.links.blockchain_site.map((l) => (
+                  {token?.links?.blockchain_site?.map((l) => (
                     <Link href={l} key={l}>
                       <img
                         className="size-8"
@@ -329,7 +335,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
               <div className="flex flex-col gap-4 justify-start">
                 <span className="text-sm text-muted-foreground">Forums</span>
                 <div className="font-light text-sm flex flex-col gap-2">
-                  {token.links?.official_forum_url?.map((l) => (
+                  {token?.links?.official_forum_url?.map((l) => (
                     <Link href={l} key={l}>
                       <ExternalLink className="w-4 h-4 inline" /> {l}
                     </Link>
@@ -340,7 +346,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
           </CardContent>
         </Card>
 
-        <Card >
+        <Card>
           <CardHeader>
             <CardTitle>Price Change History</CardTitle>
             <CardDescription>
@@ -355,11 +361,11 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   color: "hsl(var(--chart-1))",
                 },
               }}
-              className="h-full"
+              className="h-full w-full"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart
-                  data={priceChangeData}
+                  data={priceChangeData?.reverse()}
                   margin={{ top: 20, right: 30, left: 0, bottom: 20 }}
                 >
                   <XAxis
@@ -422,11 +428,11 @@ export function CoinInfo({ token }: TokenInfoProps) {
             </TabsList>
             <TabsContent value="about" className="pt-4 space-y-4">
               <div className="prose max-w-none">
-                <p>{token.description.en}</p>
+                <p>{token?.description?.en}</p>
               </div>
-              {token.categories.length > 0 && (
+              {token?.categories?.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {token.categories.map((category, i) => (
+                  {token?.categories?.map((category, i) => (
                     <Badge key={i} variant="secondary">
                       {category}
                     </Badge>
@@ -436,33 +442,33 @@ export function CoinInfo({ token }: TokenInfoProps) {
             </TabsContent>
             <TabsContent value="social" className="pt-4">
               <div className="grid gap-4">
-                {token.community_data.twitter_followers !== null && (
+                {token?.community_data?.twitter_followers !== null && (
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       Twitter Followers
                     </span>
                     <span className="font-medium">
-                      {token.community_data.twitter_followers.toLocaleString()}
+                      {token?.community_data?.twitter_followers?.toLocaleString()}
                     </span>
                   </div>
                 )}
-                {token.community_data.telegram_channel_user_count !== null && (
+                {token?.community_data?.telegram_channel_user_count !== null && (
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       Telegram Members
                     </span>
                     <span className="font-medium">
-                      {token.community_data.telegram_channel_user_count.toLocaleString()}
+                      {token?.community_data?.telegram_channel_user_count?.toLocaleString()}
                     </span>
                   </div>
                 )}
-                {token.developer_data.stars !== null && (
+                {token?.developer_data?.stars !== null && (
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       GitHub Stars
                     </span>
                     <span className="font-medium">
-                      {token.developer_data.stars.toLocaleString()}
+                      {token?.developer_data?.stars?.toLocaleString()}
                     </span>
                   </div>
                 )}
@@ -470,23 +476,23 @@ export function CoinInfo({ token }: TokenInfoProps) {
             </TabsContent>
             <TabsContent value="markets" className="pt-4">
               <div className="space-y-4">
-                {token.tickers.slice(0, 5).map((ticker) => (
+                {token?.tickers?.slice(0, 5)?.map((ticker) => (
                   <div
-                    key={`${ticker.market.identifier}-${ticker.target}`}
+                    key={`${ticker?.market?.identifier}-${ticker?.target}`}
                     className="flex justify-between items-center"
                   >
                     <div>
-                      <div className="font-medium">{ticker.market.name}</div>
+                      <div className="font-medium">{ticker?.market?.name}</div>
                       <div className="text-sm text-muted-foreground">
-                        {ticker.base}/{ticker.target}
+                        {ticker?.base}/{ticker?.target}
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="font-medium">
-                        ${ticker.converted_last.usd.toLocaleString()}
+                        ${ticker?.converted_last?.usd?.toLocaleString()}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Vol: ${ticker.converted_volume.usd.toLocaleString()}
+                        Vol: ${ticker?.converted_volume?.usd?.toLocaleString()}
                       </div>
                     </div>
                   </div>
