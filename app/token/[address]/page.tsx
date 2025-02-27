@@ -1,3 +1,4 @@
+// "use cache";
 import { notFound } from "next/navigation";
 import { TokenInfo } from "@/components/token-info";
 import { getTokenData } from "@/lib/token-service";
@@ -10,9 +11,7 @@ import { CoinGeckoCoinData } from "@/types/coin-gecko";
 import { TOKEN_SEARCH } from "@/const/token-search";
 
 interface TokenPageProps {
-  params: {
-    address: string;
-  };
+  params: Promise<{ address: string }>;
 }
 
 export default async function TokenPage({ params }: TokenPageProps) {

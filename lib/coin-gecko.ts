@@ -2,6 +2,7 @@ import { CoinGeckoResponse, CoinGeckoCoinData } from "@/types/coin-gecko";
 
 export class CoinGecko {
   static async searchToken(address: string) {
+    'use cache';
     const response = await fetch(
       `https://www.coingecko.com/en/search_v2?query=${address}`,
       { cache: "force-cache" }
@@ -17,6 +18,7 @@ export class CoinGecko {
   }
 
   static async getTokenDataByCoinId(coinId: string) {
+    'use cache';
     const response = await fetch(
       `https://api.coingecko.com/api/v3/coins/${coinId}`,
       {
