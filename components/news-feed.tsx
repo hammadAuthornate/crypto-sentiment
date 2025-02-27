@@ -1,4 +1,10 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,20 +29,18 @@ interface NewsFeedProps {
 }
 
 export async function NewsFeed() {
-    
-//   const response = NEWS_DATA;
+  //   const response = NEWS_DATA;
   const response = await CryptoPanic.getNews();
   const news = response?.results;
   const hasMore = !!response?.next;
   const filteredNews = news;
-//   const [filter, setFilter] = useState<"all" | "news" | "media">("all");
+  //   const [filter, setFilter] = useState<"all" | "news" | "media">("all");
 
-//   const filteredNews = news?.filter((item) => {
-//     if (filter === "all") return true;
-//     return item.kind === filter;
-//   });
+  //   const filteredNews = news?.filter((item) => {
+  //     if (filter === "all") return true;
+  //     return item.kind === filter;
+  //   });
 
-  
   return (
     <Card className="w-full h-full bg-zinc-100 text-zinc-800">
       <CardHeader className="border-b border-zinc-800">
@@ -61,28 +65,39 @@ export async function NewsFeed() {
         <ScrollArea className="h-[600px] pr-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredNews?.map((item, index) => (
-              <Card key={index} className="bg-zinc-200/50 border-zinc-300 hover:border-zinc-600 transition-colors">
+              <Card
+                key={index}
+                className="bg-zinc-200/50 border-zinc-300 hover:border-zinc-600 transition-colors"
+              >
                 <CardHeader className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-zinc-800">
-                    <span>{formatDistanceToNow(new Date(item.published_at))} ago</span>
+                    <span>
+                      {formatDistanceToNow(new Date(item?.published_at))} ago
+                    </span>
                     <span>•</span>
-                    <span>{item.source.title}</span>
+                    <span>{item?.source?.title}</span>
                   </div>
                   <Link
-                    href={item.url}
+                    href={
+                      "https://" + item?.source?.domain + (item?.source?.path || "")
+                    }
                     target="_blank"
                     className="text-base font-medium hover:text-blue-400 flex items-start gap-2 group"
                   >
-                    <span className="flex-1">{item.title}</span>
+                    <span className="flex-1">{item?.title}</span>
                     <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1" />
                   </Link>
                 </CardHeader>
                 <CardContent>
-                  {item.currencies && item.currencies.length > 0 && (
+                  {item?.currencies && item?.currencies?.length > 0 && (
                     <div className="flex flex-wrap gap-1">
-                      {item.currencies.map((currency, index) => (
-                        <Badge key={index} variant="secondary" className="bg-zinc-700 text-zinc-100">
-                          {currency.code}
+                      {item?.currencies?.map((currency, index) => (
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="bg-zinc-700 text-zinc-100"
+                        >
+                          {currency?.code}
                         </Badge>
                       ))}
                     </div>
@@ -96,7 +111,7 @@ export async function NewsFeed() {
                       className="text-zinc-400 hover:text-green-400 hover:bg-zinc-700 flex-1"
                     >
                       <ThumbsUp className="w-4 h-4 mr-1" />
-                      {item.votes.positive}
+                      {item?.votes?.positive}
                     </Button>
                     <Button
                       variant="ghost"
@@ -104,7 +119,7 @@ export async function NewsFeed() {
                       className="text-zinc-400 hover:text-red-400 hover:bg-zinc-700 flex-1"
                     >
                       <ThumbsDown className="w-4 h-4 mr-1" />
-                      {item.votes.negative}
+                      {item?.votes?.negative}
                     </Button>
                     <Button
                       variant="ghost"
@@ -112,9 +127,13 @@ export async function NewsFeed() {
                       className="text-zinc-400 hover:text-blue-400 hover:bg-zinc-700 flex-1"
                     >
                       <MessageSquare className="w-4 h-4 mr-1" />
-                      {item.votes.comments}
+                      {item?.votes?.comments}
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-yellow-400 hover:bg-zinc-700">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-zinc-400 hover:text-yellow-400 hover:bg-zinc-700"
+                    >
                       <Bookmark className="w-4 h-4" />
                     </Button>
                   </div>
@@ -135,6 +154,5 @@ export async function NewsFeed() {
         </ScrollArea>
       </CardContent>
     </Card>
-  )
+  );
 }
-

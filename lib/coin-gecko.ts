@@ -1,8 +1,12 @@
-import { CoinGeckoResponse, CoinGeckoCoinData } from "@/types/coin-gecko";
+import {
+  CoinGeckoResponse,
+  CoinGeckoCoinData,
+  CoinGeckoChartData,
+} from "@/types/coin-gecko";
 
 export class CoinGecko {
   static async searchToken(address: string) {
-    'use cache';
+    "use cache";
     const response = await fetch(
       `https://www.coingecko.com/en/search_v2?query=${address}`,
       { cache: "force-cache" }
@@ -18,7 +22,7 @@ export class CoinGecko {
   }
 
   static async getTokenDataByCoinId(coinId: string) {
-    'use cache';
+    "use cache";
     const response = await fetch(
       `https://api.coingecko.com/api/v3/coins/${coinId}`,
       {
@@ -34,6 +38,27 @@ export class CoinGecko {
       return data as CoinGeckoCoinData;
     } else {
       console.log("error fetching details from coin gecko ", response);
+      //   throw Error("Unable to Fetch a response for the selected address");
+    }
+  }
+
+  static async getTokenChartDataByCoinId(coinId: string) {
+    "use cache";
+    const response = await fetch(
+      `https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=365`,
+      {
+        cache: "force-cache",
+        headers: {
+          "x-cg-demo-api-key": process.env.COIN_GECKO_API_KEY!,
+        },
+      }
+    );
+    if (response.status === 200) {
+      console.log("fetched chart data for coin id ", coinId);
+      const data = await response.json();
+      return data as CoinGeckoChartData;
+    } else {
+      console.log("error fetching chart details from coin gecko ", response);
       //   throw Error("Unable to Fetch a response for the selected address");
     }
   }

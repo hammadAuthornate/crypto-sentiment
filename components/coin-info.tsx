@@ -22,6 +22,7 @@ import { ExternalLink, Twitter, MessageCircle } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { isAddress } from "ethers";
 
 interface TokenInfoProps {
   token: CoinGeckoCoinData;
@@ -72,7 +73,9 @@ export function CoinInfo({ token }: TokenInfoProps) {
               <div>
                 <div className="flex items-center gap-2">
                   <CardTitle>{token?.name}</CardTitle>
-                  <Badge variant="outline">{token?.symbol?.toUpperCase()}</Badge>
+                  <Badge variant="outline">
+                    {token?.symbol?.toUpperCase()}
+                  </Badge>
                   {token?.market_data?.market_cap_rank && (
                     <Badge variant="secondary">
                       Rank #{token?.market_data?.market_cap_rank}
@@ -82,7 +85,7 @@ export function CoinInfo({ token }: TokenInfoProps) {
                 <div className="flex items-center gap-4 mt-2">
                   {token?.links?.homepage?.at(0) && (
                     <Link
-                      href={token?.links?.homepage?.at(0)?.toString() || ''}
+                      href={token?.links?.homepage?.at(0)?.toString() || ""}
                       target="_blank"
                       className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
                     >
@@ -124,13 +127,16 @@ export function CoinInfo({ token }: TokenInfoProps) {
                     : "text-red-600"
                 }`}
               >
-                {token?.market_data?.price_change_percentage_24h >= 0 ? "+" : ""}
+                {token?.market_data?.price_change_percentage_24h >= 0
+                  ? "+"
+                  : ""}
                 {token?.market_data?.price_change_percentage_24h?.toFixed(2)}%
               </div>
             </div>
           </div>
           <div>
-            <span className="font-light">Address</span> {token?.contract_address}
+            <span className="font-light">Address</span>{" "}
+            {token?.contract_address}
           </div>
         </CardHeader>
       </Card>
@@ -206,7 +212,8 @@ export function CoinInfo({ token }: TokenInfoProps) {
                         : "text-red-600"
                     }`}
                   >
-                    {token?.market_data?.ath_change_percentage?.usd?.toFixed(1)}%
+                    {token?.market_data?.ath_change_percentage?.usd?.toFixed(1)}
+                    %
                   </div>
                 </div>
               </div>
@@ -225,7 +232,8 @@ export function CoinInfo({ token }: TokenInfoProps) {
                         : "text-red-600"
                     }`}
                   >
-                    {token?.market_data?.atl_change_percentage?.usd?.toFixed(1)}%
+                    {token?.market_data?.atl_change_percentage?.usd?.toFixed(1)}
+                    %
                   </div>
                 </div>
               </div>
@@ -273,6 +281,31 @@ export function CoinInfo({ token }: TokenInfoProps) {
                   </div>
                 </div>
               </div>
+              {token?.sentiment_votes_up_percentage && (
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">
+                    Overall Sentiment
+                  </span>
+                  <div className="text-right">
+                    <div
+                      className={`font-medium ${
+                        token?.sentiment_votes_up_percentage < 50
+                          ? "text-red-600"
+                          : "text-green-600"
+                      }`}
+                    >
+                      {token?.sentiment_votes_up_percentage < 25 && "Bearish"}
+                      {token?.sentiment_votes_up_percentage >= 25 &&
+                        token?.sentiment_votes_up_percentage <= 50 &&
+                        "lightly Bearish"}
+                      {token?.sentiment_votes_up_percentage > 50 &&
+                        token?.sentiment_votes_up_percentage <= 75 &&
+                        "lightly Bullish"}
+                      {token?.sentiment_votes_up_percentage > 75 && "Bullish"}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <Separator />
             <div className="space-y-2">
@@ -331,18 +364,20 @@ export function CoinInfo({ token }: TokenInfoProps) {
               </div>
             </div>
             <Separator />
-            <div className="space-y-2">
-              <div className="flex flex-col gap-4 justify-start">
-                <span className="text-sm text-muted-foreground">Forums</span>
-                <div className="font-light text-sm flex flex-col gap-2">
-                  {token?.links?.official_forum_url?.map((l) => (
-                    <Link href={l} key={l}>
-                      <ExternalLink className="w-4 h-4 inline" /> {l}
-                    </Link>
-                  ))}
+            {token?.links?.official_forum_url?.length !== 0 && (
+              <div className="space-y-2">
+                <div className="flex flex-col gap-4 justify-start">
+                  <span className="text-sm text-muted-foreground">Forums</span>
+                  <div className="font-light text-sm flex flex-col gap-2">
+                    {token?.links?.official_forum_url?.map((l) => (
+                      <Link href={l} key={l}>
+                        <ExternalLink className="w-4 h-4 inline" /> {l}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
 
@@ -452,7 +487,8 @@ export function CoinInfo({ token }: TokenInfoProps) {
                     </span>
                   </div>
                 )}
-                {token?.community_data?.telegram_channel_user_count !== null && (
+                {token?.community_data?.telegram_channel_user_count !==
+                  null && (
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       Telegram Members
@@ -476,23 +512,68 @@ export function CoinInfo({ token }: TokenInfoProps) {
             </TabsContent>
             <TabsContent value="markets" className="pt-4">
               <div className="space-y-4">
-                {token?.tickers?.slice(0, 5)?.map((ticker) => (
+                {token?.tickers?.slice(0, 5)?.map((ticker, index) => (
                   <div
-                    key={`${ticker?.market?.identifier}-${ticker?.target}`}
-                    className="flex justify-between items-center"
+                    key={index}
+                    className="flex justify-between items-center bg-zinc-100 my-2 rounded-xl p-2"
                   >
-                    <div>
-                      <div className="font-medium">{ticker?.market?.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {ticker?.base}/{ticker?.target}
+                    <div className="flex gap-4">
+                      {ticker?.trade_url && (
+                        <Link
+                          href={ticker?.trade_url}
+                          target="_blank"
+                          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </Link>
+                      )}
+                      <div>
+                        <div className="font-medium">
+                          {ticker?.market?.name}
+                        </div>
+                        <div className="text-sm text-muted-foreground flex">
+                          {ticker?.base}/
+                          {ticker?.target?.length >= 40 ? (
+                            <Link
+                              href={"/token/" + ticker.target}
+                              // target="_blank"
+                              className="flex text-sm text-muted-foreground hover:text-primary"
+                            >
+                              <span className="hover:underline">
+                                {ticker?.target}
+                              </span>{" "}
+                              <ExternalLink className="w-4 h-4" />
+                            </Link>
+                          ) : (
+                            <>{ticker?.target}</>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="font-medium">
-                        ${ticker?.converted_last?.usd?.toLocaleString()}
+                    <div className="flex gap-4">
+                      <div className="text-right">
+                        <div className="font-medium">Volume</div>
+                        <div className="text-sm text-muted-foreground">
+                          {ticker?.volume?.toFixed(2)?.toString()}
+                        </div>
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        Vol: ${ticker?.converted_volume?.usd?.toLocaleString()}
+                      <div className="text-right">
+                        <div className="font-medium">Spread</div>
+                        <div className="text-sm text-muted-foreground">
+                          {ticker?.bid_ask_spread_percentage
+                            ?.toFixed(4)
+                            ?.toString()}{" "}
+                          %
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="font-medium">
+                          ${ticker?.converted_last?.usd?.toLocaleString()}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          Vol: $
+                          {ticker?.converted_volume?.usd?.toLocaleString()}
+                        </div>
                       </div>
                     </div>
                   </div>

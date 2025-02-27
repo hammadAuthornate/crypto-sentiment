@@ -9,6 +9,7 @@ import { CoinInfo } from "@/components/coin-info";
 import { COIN_DATA } from "@/const/coin-data";
 import { CoinGeckoCoinData } from "@/types/coin-gecko";
 import { TOKEN_SEARCH } from "@/const/token-search";
+import { PriceChart } from "@/components/price-chart";
 
 interface TokenPageProps {
   params: Promise<{ address: string }>;
@@ -29,6 +30,10 @@ export default async function TokenPage({ params }: TokenPageProps) {
     const coinDetails = await CoinGecko.getTokenDataByCoinId(
       tokenData?.coins?.at(0)?.id!
     );
+
+    const chartDetails = await CoinGecko.getTokenChartDataByCoinId(
+      tokenData?.coins?.at(0)?.id!
+    );
     // const coinDetails = COIN_DATA as unknown as CoinGeckoCoinData;
 
     return (
@@ -41,6 +46,7 @@ export default async function TokenPage({ params }: TokenPageProps) {
           <TokenInfo key={key} token={token} />
         ))} */}
         {coinDetails && <CoinInfo token={coinDetails} />}
+        {chartDetails && <PriceChart data={chartDetails} /> }
       </div>
     );
   } catch (error) {

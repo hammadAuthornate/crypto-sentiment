@@ -15,6 +15,12 @@ export interface CoinGeckoResponse {
   };
 }
 
+export interface CoinGeckoChartData {
+  prices: [number, number][]
+  market_caps: [number, number][]
+  total_volumes: [number, number][]
+}
+
 export interface CoinGeckoCoinResponse {
   thumb: string;
   name: string;
